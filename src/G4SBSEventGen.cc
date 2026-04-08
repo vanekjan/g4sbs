@@ -2616,12 +2616,12 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
   bool invalid_hadron = true;
   switch(fHadronType) {
   case G4SBS::kPiPlus:
-    Mh = proton_mass_c2;
+    Mh = G4PionPlus::PionPlusDefinition()->GetPDGMass();
     fSIMCEvent.fnucl = 211;
     invalid_hadron = false;
     break;
   case G4SBS::kPiMinus:
-    Mh = neutron_mass_c2;
+    Mh = G4PionPlus::PionPlusDefinition()->GetPDGMass();
     fSIMCEvent.fnucl = -211;
     invalid_hadron = false;
     break;
