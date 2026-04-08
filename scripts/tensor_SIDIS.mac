@@ -39,4 +39,4 @@
 
 ## Run 1000 events
 /g4sbs/eventstatusevery 1000
-#/g4sbs/run             10000
+/g4sbs/run             10000
