@@ -2631,6 +2631,7 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
     exit(1);
   }
 
+  cout<<"Fill simc SIDIS tree"<<endl;
 
   fSIMCEvent.sigma = fSIMC_SIDISTree->siglab/cm2;
   fSIMCEvent.Weight = fSIMC_SIDISTree->Weight;
