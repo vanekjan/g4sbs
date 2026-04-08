@@ -1,8 +1,9 @@
-## Configure G4SBS for gmn (Q^2 = 3 GeV^2)
-#/g4sbs/filename       $SWIF_JOB_WORK_DIR/sbs4_sbs50p_simc_deen.root   ## Output rootfile
+/g4sbs/filename ./output/tensor_SIDIS_g4sbs.root
+
+/g4sbs/simcfile ./input/tensor_SIDIS_simc.root
 
 ## Configure Experiment
-/g4sbs/exp             gmn
+/g4sbs/exp             sidis
 
 ## Configure the target
 /g4sbs/target          LD2
@@ -10,7 +11,7 @@
 
 ## Configure generator settings
 /g4sbs/kine            simc           ## Generator
-/g4sbs/hadron          n         
+/g4sbs/hadron          pi+         
 
 ## Configure standard detector settings
 /g4sbs/hcaldist        11.0 m
@@ -37,5 +38,5 @@
 /g4sbs/totalabs true
 
 ## Run 1000 events
-/g4sbs/eventstatusevery 100
-#/g4sbs/run             100000
+/g4sbs/eventstatusevery 1000
+#/g4sbs/run             10000
