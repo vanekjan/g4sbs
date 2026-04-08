@@ -3,14 +3,14 @@
 /g4sbs/simcfile ./input/tensor_SIDIS_simc.root
 
 ## Configure Experiment
-/g4sbs/exp             sidis
+/g4sbs/exp             gmn
 
 ## Configure the target
 /g4sbs/target          LD2
 /g4sbs/targlen         15.0 cm           ## Target Length
 
 ## Configure generator settings
-/g4sbs/kine            simc           ## Generator
+/g4sbs/kine            simc_sidis           ## Generator
 /g4sbs/beamcur         30 muA
 /g4sbs/rasterx         2.0 mm
 /g4sbs/rastery         2.0 mm

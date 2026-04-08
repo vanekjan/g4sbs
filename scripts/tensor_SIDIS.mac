@@ -3,14 +3,14 @@
 /g4sbs/simcfile ./input/tensor_SIDIS_simc.root
 
 ## Configure Experiment
-/g4sbs/exp             sidis
+/g4sbs/exp             gmn
 
 ## Configure the target
 /g4sbs/target          LD2
 /g4sbs/targlen         15.0 cm           ## Target Length
 
 ## Configure generator settings
-/g4sbs/kine            simc           ## Generator
+/g4sbs/kine            simc_sidis           ## Generator
 /g4sbs/hadron          pi+         
 
 ## Configure standard detector settings
@@ -22,11 +22,11 @@
 ## Configure the magnets
 /g4sbs/bbfield         1
 /g4sbs/scalebbfield    0.9672 
-/g4sbs/tosfield        SBSPortableFieldMap_FrontClampOnly_NoPoleShims.table 2
+/g4sbs/tosfield        SBSPortableFieldMap_FrontClampOnly_NoPoleShims.table 0
 /g4sbs/scalesbsfield   0.390
-/g4sbs/bbang           36.0 deg
+/g4sbs/bbang           11.35 deg
 /g4sbs/bbdist          1.7988 m
-/g4sbs/sbsang          31.9 deg
+/g4sbs/sbsang          15.0 deg
 /g4sbs/48D48dist       2.25 m 
 
 ## Al bg shielding in front of the scattering chamber
@@ -37,6 +37,6 @@
 /g4sbs/keepsdtrackinfo 	all true
 /g4sbs/totalabs true
 
-## Run 1000 events
+## Run 10000 events
 /g4sbs/eventstatusevery 1000
 /g4sbs/run             10000
