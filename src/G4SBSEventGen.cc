@@ -2643,7 +2643,7 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
   fSIMCEvent.epsilon = fSIMC_SIDISTree->epsilon;
 
   //fSIMCEvent.Ebeam = fSIMC_SIDISTree->ebeam/MeV;
-  fSIMCEvent.Ebeam = 11;                                            //hard coded for now, may add to simc tree
+  fSIMCEvent.Ebeam = 11.;                                            //hard coded for now, may add to simc tree
   //scattered e- kinematics at vertex
   //fSIMCEvent.veE = fSIMC_SIDISTree->veE/1E3; //GeV
   fSIMCEvent.veE = -99; //GeV                                       //not used for SIDIS, may remove later with dedicated tree
