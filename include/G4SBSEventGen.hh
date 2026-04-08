@@ -151,7 +151,7 @@ public:
   G4SBSSIMCOutput GetSIMCEvent(){ return fSIMCEvent; }
 
   simc_tree *GetSIMCTree(){ return fSIMCTree; }
-  simc_treeSIDIS *GetSIMCTree(){ return fSIMC_SIDISTree; }
+  simc_tree_SIDIS *GetSIMCSIDISTree(){ return fSIMC_SIDISTree; }
   TChain *GetSIMCChain(){ return fSIMCChain; }
 
   void LoadSIMCChain(G4String fname);
