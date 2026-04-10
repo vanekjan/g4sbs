@@ -2673,6 +2673,8 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
   fSIMCEvent.vy = 0;
   fSIMCEvent.vz = 0;
 
+  fSIMCEvent.ConvertToTreeUnits();
+
   fVert.set(fSIMCEvent.vx, fSIMCEvent.vy, fSIMCEvent.vz);
 
   fElectronP = G4ThreeVector(fSIMCEvent.px_e, fSIMCEvent.py_e, fSIMCEvent.pz_e);

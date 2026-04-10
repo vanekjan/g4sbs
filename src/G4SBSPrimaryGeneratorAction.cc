@@ -150,7 +150,7 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if( sbsgen->GetKine() == G4SBS::kSIMC_SIDIS ){ //SIMC event:
     G4SBSSIMCOutput Primaries = sbsgen->GetSIMCEvent();
 
-    Primaries.ConvertToTreeUnits();
+    //Primaries.ConvertToTreeUnits();
 
     particle = particleTable->FindParticle(particleName="e-");
     particleGun->SetParticleDefinition(particle);
