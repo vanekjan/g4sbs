@@ -149,7 +149,7 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   if( sbsgen->GetKine() == G4SBS::kSIMC_SIDIS ){ //SIMC event:
     G4SBSSIMCOutput Primaries = sbsgen->GetSIMCEvent();
-/*
+
     particle = particleTable->FindParticle(particleName="e-");
     particleGun->SetParticleDefinition(particle);
     particleGun->SetParticleMomentumDirection( sbsgen->GetElectronP().unit() );
@@ -157,7 +157,7 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleGun->SetParticlePosition( sbsgen->GetV() );
 
     particleGun->GeneratePrimaryVertex(anEvent);
-*/
+
     bool invalid_hadron = true;
     switch(sbsgen->GetHadronType()) {
     case G4SBS::kPiPlus:
@@ -180,7 +180,7 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->GeneratePrimaryVertex(anEvent);
 
-    //Primaries.ConvertToTreeUnits();
+    Primaries.ConvertToTreeUnits();
     fIO->SetSIMCOutput( Primaries );
 
     return;

@@ -46,18 +46,18 @@ void G4SBSSIMCOutput::ConvertToTreeUnits(){ //This is called once per event afte
   //W /= (GeV);
   //nu /= (GeV);
   
-  Ebeam /= GeV;
+  Ebeam *= GeV;
   
-  p_e /= GeV;
-  px_e /= GeV;
-  py_e /= GeV;
-  pz_e /= GeV;
-  p_n /= GeV;
-  px_n /= GeV;
-  py_n /= GeV;
-  pz_n /= GeV;
+  p_e *= GeV;
+  px_e *= GeV;
+  py_e *= GeV;
+  pz_e *= GeV;
+  p_n *= GeV;
+  px_n *= GeV;
+  py_n *= GeV;
+  pz_n *= GeV;
 
-  vx /= m;
-  vy /= m;
-  vz /= m;
+  vx *= m;
+  vy *= m;
+  vz *= m;
 }
