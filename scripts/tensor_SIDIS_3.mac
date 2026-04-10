@@ -59,6 +59,8 @@
 /g4sbs/ehmin      1.0 GeV
 /g4sbs/ehmax      10.5 GeV
 
+/g4sbs/targgenhhconfig 300
+
 /g4sbs/treeflag 1
 
 /g4sbs/totalabs true
