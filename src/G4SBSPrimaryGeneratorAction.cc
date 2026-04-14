@@ -85,18 +85,18 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     for( int ipart = 0; ipart<Primaries.Nprimaries; ipart++ ){
       if( Primaries.genflag[ipart] != 0 ){
-	particle = particleTable->FindParticle( Primaries.PID[ipart] );
-	particleGun->SetParticleDefinition(particle);
-	particleGun->SetNumberOfParticles(1);
-	particleGun->SetParticleEnergy( Primaries.E[ipart]-Primaries.M[ipart] );
-	particleGun->SetParticleMomentumDirection( G4ThreeVector( Primaries.Px[ipart], Primaries.Py[ipart], Primaries.Pz[ipart] ).unit() );
+        particle = particleTable->FindParticle( Primaries.PID[ipart] );
+        particleGun->SetParticleDefinition(particle);
+        particleGun->SetNumberOfParticles(1);
+        particleGun->SetParticleEnergy( Primaries.E[ipart]-Primaries.M[ipart] );
+        particleGun->SetParticleMomentumDirection( G4ThreeVector( Primaries.Px[ipart], Primaries.Py[ipart], Primaries.Pz[ipart] ).unit() );
 
-	//G4ThreeVector vertex( Primaries.vx[ipart], Primaries.vy[ipart], Primaries.vz[ipart] );
-	//vertex += sbsgen->GetV();
-	particleGun->SetParticlePosition( G4ThreeVector( Primaries.vx[ipart], Primaries.vy[ipart], Primaries.vz[ipart] ) );
-	particleGun->SetParticleTime( Primaries.t[ipart] );
-	particleGun->GeneratePrimaryVertex(anEvent);
-	ngen++;
+        //G4ThreeVector vertex( Primaries.vx[ipart], Primaries.vy[ipart], Primaries.vz[ipart] );
+        //vertex += sbsgen->GetV();
+        particleGun->SetParticlePosition( G4ThreeVector( Primaries.vx[ipart], Primaries.vy[ipart], Primaries.vz[ipart] ) );
+        particleGun->SetParticleTime( Primaries.t[ipart] );
+        particleGun->GeneratePrimaryVertex(anEvent);
+        ngen++;
       }
     }
 
@@ -151,8 +151,6 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     G4SBSSIMC_SIDISOutput Primaries = sbsgen->GetSIMC_SIDISEvent();
 
-    //Primaries.ConvertToTreeUnits();
-
     particle = particleTable->FindParticle(particleName="e-");
     particleGun->SetParticleDefinition(particle);
     particleGun->SetParticleMomentumDirection( sbsgen->GetElectronP().unit() );
@@ -183,7 +181,7 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->GeneratePrimaryVertex(anEvent);
 
-    //Primaries.ConvertToTreeUnits();
+    Primaries.ConvertToTreeUnitsSIDIS();
     fIO->SetSIMC_SIDISOutput( Primaries );
 
     return;
