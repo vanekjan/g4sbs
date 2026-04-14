@@ -856,7 +856,7 @@ void G4SBSIO::BranchSIMC_SIDIS(){
   //this is not in current simc sidis tree, set manually in G4SBSEventGen.hh for now
   fTree->Branch("simc_sidis.Ebeam",&(SIMC_SIDISprimaries.Ebeam),"simc_sidis.Ebeam/D");
 
-  fTree->Branch("simc_sidis.fnucl",&(SIMC_SIDISprimaries.fnucl),"simc_sidis.fnucl/I");
+  fTree->Branch("simc_sidis.PDG_ID",&(SIMC_SIDISprimaries.PDG_ID),"simc_sidis.PDG_ID/I");
   fTree->Branch("simc_sidis.p_e",&(SIMC_SIDISprimaries.p_e),"simc_sidis.p_e/D");
   fTree->Branch("simc_sidis.theta_e",&(SIMC_SIDISprimaries.theta_e),"simc_sidis.theta_e/D");
   fTree->Branch("simc_sidis.phi_e",&(SIMC_SIDISprimaries.phi_e),"simc_sidis.phi_e/D");
