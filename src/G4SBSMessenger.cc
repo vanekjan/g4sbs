@@ -1287,7 +1287,7 @@ void G4SBSMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue){
     }
     if( newValue.compareTo("simc_sidis") == 0 ){
       kinetemp = G4SBS::kSIMC_SIDIS;
-      fIO->SetUseSIMC( true );
+      fIO->SetUseSIMC_SIDIS( true );
       fevgen->SetRejectionSamplingFlag(false);
       validcmd = true;
     }

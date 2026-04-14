@@ -15,6 +15,7 @@
 #include "G4SBSDetectorConstruction.hh"
 #include "G4SBSPythiaOutput.hh"
 #include "G4SBSSIMCOutput.hh"
+#include "G4SBSSIMC_SIDISOutput.hh"
 
 // for D Flay studies
 #include "G4SBSBDoutput.hh"
@@ -34,7 +35,7 @@ typedef struct {
 } gen_t;
 
 
-//"count", "rate", "sigma" are all redundant, should really only store one to the tree. 
+//"count", "rate", "sigma" are all redundant, should really only store one to the tree.
 //Also "solang" is a "run" level quantity, shouldn't really be written to the tree every event, but whatever.
 typedef struct {
   Double_t count, rate, solang, sigma, W2, xbj, Q2, th, ph;
@@ -83,7 +84,7 @@ typedef struct {
 
   Double_t bcvx[MAXHITDATA], bcvy[MAXHITDATA], bcvz[MAXHITDATA];
   Double_t hcvx[MAXHITDATA], hcvy[MAXHITDATA], hcvz[MAXHITDATA];
-  
+
   Int_t hctrid[MAXHITDATA], hcmid[MAXHITDATA], hcpid[MAXHITDATA];
   Int_t bctrid[MAXHITDATA], bcmid[MAXHITDATA], bcpid[MAXHITDATA];
 
@@ -95,7 +96,7 @@ class G4SBSIO {
 public:
   G4SBSIO();
   ~G4SBSIO();
-  
+
   void SetFilename(const char *fn){strcpy(fFilename, fn);}
   //void SetTrackData(tr_t td){ trdata = td; }
   //void SetCalData(cal_t cd){ caldata = cd; }
@@ -104,8 +105,8 @@ public:
   //void SetRICHData( G4SBSRICHoutput rd ) { richdata = rd; }
   //void SetTrackData( G4SBSTrackerOutput td ){ trackdata = td; }
   //void SetGEMData( G4SBSGEMoutput gd ){ GEMdata = gd; }
-  //void 
- 
+  //void
+
   void SetGEMData( G4String, G4SBSGEMoutput );
   void SetTrackData( G4String, G4SBSTrackerOutput );
   void SetCalData( G4String, G4SBSCALoutput );
@@ -113,23 +114,23 @@ public:
   void SetECalData( G4String, G4SBSECaloutput );
   void SetSDtrackData( G4String, G4SBSSDTrackOutput );
   // for D Flay studies
-  void SetBDData(G4String SDname,G4SBSBDoutput data);                   // for Beam Diffuser (BD)  
-  void SetICData(G4String SDname,G4SBSICoutput data);                   // for Ion Chamber (IC)   
-  void SetGEnTargetData_Glass(G4String SDname,G4SBSTargetoutput data);  // for GEn target glass 
-  void SetGEnTargetData_Cu(G4String SDname,G4SBSTargetoutput data);     // for GEn target Cu  
-  void SetGEnTargetData_Al(G4String SDname,G4SBSTargetoutput data);     // for GEn target Al  
-  void SetGEnTargetData_3He(G4String SDname,G4SBSTargetoutput data);    // for GEn target 3He  
+  void SetBDData(G4String SDname,G4SBSBDoutput data);                   // for Beam Diffuser (BD)
+  void SetICData(G4String SDname,G4SBSICoutput data);                   // for Ion Chamber (IC)
+  void SetGEnTargetData_Glass(G4String SDname,G4SBSTargetoutput data);  // for GEn target glass
+  void SetGEnTargetData_Cu(G4String SDname,G4SBSTargetoutput data);     // for GEn target Cu
+  void SetGEnTargetData_Al(G4String SDname,G4SBSTargetoutput data);     // for GEn target Al
+  void SetGEnTargetData_3He(G4String SDname,G4SBSTargetoutput data);    // for GEn target 3He
 
-  inline void SetAllSDtrackData( G4SBSSDTrackOutput sd ){ allsdtrackdata = sd; } 
+  inline void SetAllSDtrackData( G4SBSSDTrackOutput sd ){ allsdtrackdata = sd; }
 
   //inline G4SBSSDTrackOutput GetSDtrackData( G4String sdname ){ return sdtrackdata[sdname]; }
 
   //void SetECalData( G4SBSECaloutput ed ){ ecaldata = ed; }
 
-  
+
   void FillTree();
   void WriteTree();
-  
+
   void SetBeamE(double E){ gendata.Ebeam = E/CLHEP::GeV; }
   void SetBeamCur(double cur){ gendata.Ibeam = cur; }
   void SetBigBiteTheta(double th){ gendata.thbb = th; }
@@ -146,12 +147,12 @@ public:
   void SetRICHDist(double d){ gendata.drich = d/CLHEP::m; }
   void SetSBStrkrDist(double d){ gendata.dsbstrkr = d/CLHEP::m; }
   void SetSBStrkrPitch(double a){ gendata.sbstrkrpitch = a; } //radians
-  
+
   void SetGlobalField(G4SBSGlobalField *gf){fGlobalField = gf; }
-  
+
   ev_t GetEventData(){ return evdata; }
   gen_t GetGenData(){ return gendata; }
-  
+
   void InitializeTree();
   void BranchGEM(G4String s);
   void BranchCAL(G4String s);
@@ -160,16 +161,17 @@ public:
   void BranchECAL(G4String s);
   void BranchPythia();
   void BranchSIMC();
+  void BranchSIMC_SIDIS();
   //void BranchSDTracks(G4String s);
   void BranchSDTracks();
   // for D Flay studies
-  void BranchBD(G4String SDname);           // for Beam Diffuser (BD) 
-  void BranchIC(G4String SDname);           // for Ion Chamber (IC) 
+  void BranchBD(G4String SDname);           // for Beam Diffuser (BD)
+  void BranchIC(G4String SDname);           // for Ion Chamber (IC)
   void BranchGEnTarget_Glass(G4String SDname); // for GEn target glass
   void BranchGEnTarget_Cu(G4String SDname);    // for GEn target
   void BranchGEnTarget_Al(G4String SDname);    // for GEn target
   void BranchGEnTarget_3He(G4String SDname);   // for GEn target
- 
+
   void SetDetCon(G4SBSDetectorConstruction *dc ){ fdetcon = dc; }
 
   // void SetEarmCALpart_flag( G4bool b ){ EarmCALpart_flag = b; }
@@ -177,13 +179,16 @@ public:
   map<G4String,G4bool> KeepPartCALflags;
   map<G4String,G4bool> KeepHistoryflags;
   //map<G4String,G4bool> KeepSDtracks;
-  
-  
+
+
   void SetPythiaOutput( G4SBSPythiaOutput p ){ Primaries = p; }
   void SetUsePythia6( G4bool b ){ fUsePythia = b; }
 
   void SetSIMCOutput( G4SBSSIMCOutput p ){ SIMCprimaries = p; }
   void SetUseSIMC( G4bool b ){ fUseSIMC = b; }
+
+  void SetSIMC_SIDISOutput( G4SBSSIMC_SIDISOutput p ){ SIMC_SIDISprimaries = p; }
+  void SetUseSIMC_SIDIS( G4bool b ){ fUseSIMC_SIDIS = b; }
 
   map<G4String,G4int> histogram_index; //map with key = SDname, val = histogram index in TClonesArray
 
@@ -233,11 +238,11 @@ public:
 
   void SetAUT_Collins_max( G4double Acoll ){ fAUT_Collins_max = Acoll; }
   void SetAUT_Sivers_max( G4double Asiv ){ fAUT_Sivers_max = Asiv; }
-  
+
 private:
   TFile *fFile;
   TTree *fTree;
- 
+
   G4SBSDetectorConstruction *fdetcon;
 
   G4bool fKeepAllSDtracks;
@@ -245,7 +250,7 @@ private:
 
   G4bool fKeepAllPulseShape;
   map<G4String,G4bool> fKeepPulseShape;
-  
+
   ev_t evdata;
   gen_t gendata;
 
@@ -273,9 +278,9 @@ private:
 
   G4double fAUT_Collins_max;
   G4double fAUT_Sivers_max;
-  
+
   //Add more event-level variables here....
-  
+
   //tr_t trdata;
   // cal_t caldata;
   // hit_t hitdata;
@@ -286,25 +291,28 @@ private:
   map<G4String,G4SBSTrackerOutput> trackdata;
   map<G4String,G4SBSECaloutput> ecaldata;
   map<G4String,G4SBSSDTrackOutput> sdtrackdata;
-  // for D Flay studies  
+  // for D Flay studies
   map<G4String,G4SBSBDoutput> BDdata;
   map<G4String,G4SBSICoutput> ICdata;
   map<G4String,G4SBSTargetoutput> genTgtGCdata,genTgtCUdata,genTgtALdata,genTgt3HEdata;
 
   G4SBSSDTrackOutput allsdtrackdata;
-  
+
   G4bool fUsePythia;
   G4SBSPythiaOutput Primaries;
-  
+
   G4bool fUseSIMC;
   G4SBSSIMCOutput SIMCprimaries;
-  
+
+  G4bool fUseSIMC_SIDIS;
+  G4SBSSIMCOutput SIMC_SIDISprimaries;
+
   G4SBSGlobalField *fGlobalField;
-  
+
   char fFilename[255];
 
   G4int fNhistograms;
-  
+
   // G4bool EarmCALpart_flag;
   // G4bool HarmCALpart_flag;
 
@@ -315,7 +323,7 @@ private:
 
   // Option to create "portable" field maps for SBS and/or BB from global TOSCA map:
   G4bool fWritePortableFieldMaps;
-  
+
 };
 
 #endif//G4SBSIO_H

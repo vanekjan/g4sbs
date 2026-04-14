@@ -2610,19 +2610,19 @@ bool G4SBSEventGen::GenerateSIMC(){
 bool G4SBSEventGen::GenerateSIMC_SIDIS(){
 
   fSIMC_SIDISTree->GetEntry(fchainentry++);
-  fSIMCEvent.Clear();
+  fSIMC_SIDISEvent.Clear();
 
   G4double Mh;
   bool invalid_hadron = true;
   switch(fHadronType) {
   case G4SBS::kPiPlus:
     Mh = G4PionPlus::PionPlusDefinition()->GetPDGMass();
-    fSIMCEvent.fnucl = 211;
+    fSIMC_SIDISEvent.PDG_ID = 211;
     invalid_hadron = false;
     break;
   case G4SBS::kPiMinus:
     Mh = G4PionPlus::PionPlusDefinition()->GetPDGMass();
-    fSIMCEvent.fnucl = -211;
+    fSIMC_SIDISEvent.PDG_ID = -211;
     invalid_hadron = false;
     break;
   }
@@ -2633,57 +2633,57 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
 
   //cout<<"Fill simc SIDIS tree"<<endl;
 
-  fSIMCEvent.sigma = fSIMC_SIDISTree->siglab/cm2;
-  fSIMCEvent.Weight = fSIMC_SIDISTree->Weight;
+  fSIMC_SIDISEvent.sigma = fSIMC_SIDISTree->siglab/cm2;
+  fSIMC_SIDISEvent.Weight = fSIMC_SIDISTree->Weight;
 
-  fSIMCEvent.Q2 = fSIMC_SIDISTree->Q2;
-  fSIMCEvent.xbj = fSIMC_SIDISTree->Q2/(2*Mh/GeV*fSIMC_SIDISTree->nu);//Q2 and nu are in GeV...
-  fSIMCEvent.nu = fSIMC_SIDISTree->nu;
-  fSIMCEvent.W = fSIMC_SIDISTree->W;
-  fSIMCEvent.epsilon = fSIMC_SIDISTree->epsilon;
+  fSIMC_SIDISEvent.Q2 = fSIMC_SIDISTree->Q2;
+  fSIMC_SIDISEvent.xbj = fSIMC_SIDISTree->Q2/(2*Mh/GeV*fSIMC_SIDISTree->nu);//Q2 and nu are in GeV...
+  fSIMC_SIDISEvent.nu = fSIMC_SIDISTree->nu;
+  fSIMC_SIDISEvent.W = fSIMC_SIDISTree->W;
+  fSIMC_SIDISEvent.epsilon = fSIMC_SIDISTree->epsilon;
 
-  //fSIMCEvent.Ebeam = fSIMC_SIDISTree->ebeam/MeV;
-  fSIMCEvent.Ebeam = 11.;                                            //hard coded for now, may add to simc tree
+  //fSIMC_SIDISEvent.Ebeam = fSIMC_SIDISTree->ebeam/MeV;
+  fSIMC_SIDISEvent.Ebeam = 11.;                                            //hard coded for now, may add to simc tree
   //scattered e- kinematics at vertex
-  //fSIMCEvent.veE = fSIMC_SIDISTree->veE/1E3; //GeV
-  fSIMCEvent.veE = -99; //GeV                                       //not used for SIDIS, may remove later with dedicated tree
-  //fSIMCEvent.vetheta = fSIMC_SIDISTree->vetheta;
-  fSIMCEvent.vetheta = -99;                                         //not used for SIDIS, may remove later with dedicated tree
+  //fSIMC_SIDISEvent.veE = fSIMC_SIDISTree->veE/1E3; //GeV
+  //fSIMC_SIDISEvent.veE = -99; //GeV                                       //not used for SIDIS, may remove later with dedicated tree
+  //fSIMC_SIDISEvent.vetheta = fSIMC_SIDISTree->vetheta;
+  //fSIMC_SIDISEvent.vetheta = -99;                                         //not used for SIDIS, may remove later with dedicated tree
 
-  fSIMCEvent.p_e = fSIMC_SIDISTree->p_e;
-  fSIMCEvent.theta_e = fSIMC_SIDISTree->th_e;
-  fSIMCEvent.phi_e = fSIMC_SIDISTree->ph_e-TMath::PiOver2();
-  fSIMCEvent.px_e = fSIMC_SIDISTree->p_e*fSIMC_SIDISTree->ux_e;
-  fSIMCEvent.py_e = fSIMC_SIDISTree->p_e*fSIMC_SIDISTree->uy_e;
-  fSIMCEvent.pz_e = fSIMC_SIDISTree->p_e*fSIMC_SIDISTree->uz_e;
+  fSIMC_SIDISEvent.p_e = fSIMC_SIDISTree->p_e;
+  fSIMC_SIDISEvent.theta_e = fSIMC_SIDISTree->th_e;
+  fSIMC_SIDISEvent.phi_e = fSIMC_SIDISTree->ph_e-TMath::PiOver2();
+  fSIMC_SIDISEvent.px_e = fSIMC_SIDISTree->p_e*fSIMC_SIDISTree->ux_e;
+  fSIMC_SIDISEvent.py_e = fSIMC_SIDISTree->p_e*fSIMC_SIDISTree->uy_e;
+  fSIMC_SIDISEvent.pz_e = fSIMC_SIDISTree->p_e*fSIMC_SIDISTree->uz_e;
 
-  fSIMCEvent.p_n = fSIMC_SIDISTree->p_p;
-  fSIMCEvent.theta_n = fSIMC_SIDISTree->th_p;
-  fSIMCEvent.phi_n = fSIMC_SIDISTree->ph_p-TMath::PiOver2();
-  fSIMCEvent.px_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->ux_p;
-  fSIMCEvent.py_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->uy_p;
-  fSIMCEvent.pz_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->uz_p;
+  fSIMC_SIDISEvent.p_n = fSIMC_SIDISTree->p_p;
+  fSIMC_SIDISEvent.theta_n = fSIMC_SIDISTree->th_p;
+  fSIMC_SIDISEvent.phi_n = fSIMC_SIDISTree->ph_p-TMath::PiOver2();
+  fSIMC_SIDISEvent.px_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->ux_p;
+  fSIMC_SIDISEvent.py_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->uy_p;
+  fSIMC_SIDISEvent.pz_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->uz_p;
 /*
-  fSIMCEvent.vx = fSIMC_SIDISTree->vxi*cm;
-  fSIMCEvent.vy = fSIMC_SIDISTree->vyi*cm;
-  fSIMCEvent.vz = fSIMC_SIDISTree->vzi*cm;
+  fSIMC_SIDISEvent.vx = fSIMC_SIDISTree->vxi*cm;
+  fSIMC_SIDISEvent.vy = fSIMC_SIDISTree->vyi*cm;
+  fSIMC_SIDISEvent.vz = fSIMC_SIDISTree->vzi*cm;
 */
   //not in simc SIDIS tree now, may add later
-  fSIMCEvent.vx = 0;
-  fSIMCEvent.vy = 0;
-  fSIMCEvent.vz = 0;
+  fSIMC_SIDISEvent.vx = 0;
+  fSIMC_SIDISEvent.vy = 0;
+  fSIMC_SIDISEvent.vz = 0;
 
-  fSIMCEvent.ConvertToTreeUnits();
+  fSIMC_SIDISEvent.ConvertToGeantUnits();
 
-  fVert.set(fSIMCEvent.vx, fSIMCEvent.vy, fSIMCEvent.vz);
+  fVert.set(fSIMC_SIDISEvent.vx, fSIMC_SIDISEvent.vy, fSIMC_SIDISEvent.vz);
 
-  fElectronP = G4ThreeVector(fSIMCEvent.px_e, fSIMCEvent.py_e, fSIMCEvent.pz_e);
+  fElectronP = G4ThreeVector(fSIMC_SIDISEvent.px_e, fSIMC_SIDISEvent.py_e, fSIMC_SIDISEvent.pz_e);
   fElectronP.rotateZ(-TMath::PiOver2());
-  fElectronE = fSIMCEvent.p_e;
+  fElectronE = fSIMC_SIDISEvent.p_e;
 
-  fNucleonP = G4ThreeVector(fSIMCEvent.px_n, fSIMCEvent.py_n, fSIMCEvent.pz_n);
+  fNucleonP = G4ThreeVector(fSIMC_SIDISEvent.px_n, fSIMC_SIDISEvent.py_n, fSIMC_SIDISEvent.pz_n);
   fNucleonP.rotateZ(-TMath::PiOver2());
-  fNucleonE = sqrt(fSIMCEvent.p_n*fSIMCEvent.p_n+Mh*Mh);
+  fNucleonE = sqrt(fSIMC_SIDISEvent.p_n*fSIMC_SIDISEvent.p_n+Mh*Mh);
 
   return true;
 

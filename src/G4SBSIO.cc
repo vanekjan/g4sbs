@@ -48,19 +48,19 @@ G4SBSIO::G4SBSIO(){
   KeepHistoryflags.clear();
   //  KeepSDTracks.clear();
   //fKeepSDtracks = true; //by default.
-  
+
   GEMdata.clear();
   CALdata.clear();
   richdata.clear();
   trackdata.clear();
   ecaldata.clear();
   sdtrackdata.clear();
-  BDdata.clear(); 
-  ICdata.clear(); 
-  genTgtGCdata.clear(); 
-  genTgtCUdata.clear(); 
-  genTgtALdata.clear(); 
-  genTgt3HEdata.clear(); 
+  BDdata.clear();
+  ICdata.clear();
+  genTgtGCdata.clear();
+  genTgtCUdata.clear();
+  genTgtALdata.clear();
+  genTgt3HEdata.clear();
 
   //Set SD track data recording to OFF by default:
   fKeepAllSDtracks = false;
@@ -69,16 +69,18 @@ G4SBSIO::G4SBSIO(){
   //Set SD track data recording to OFF by default:
   fKeepAllPulseShape = false;
   fKeepPulseShape.clear();
-  
+
   Esum_histograms = NULL;
   PulseShape_histograms = NULL;
-    
+
   fUsePythia = false;
-  
+
   fUseSIMC = false;
 
+  fUseSIMC_SIDIS = false;
+
   fKineType = G4SBS::kElastic;
-  
+
   fNhistograms = 0;
 
   fUsingScintillation = false;
@@ -152,7 +154,7 @@ void G4SBSIO::InitializeTree(){
     delete fFile;
   }
 
-  fFile = new TFile(fFilename, "RECREATE"); 
+  fFile = new TFile(fFilename, "RECREATE");
 
   if( fTree ){ delete fTree; }
 
@@ -160,7 +162,7 @@ void G4SBSIO::InitializeTree(){
   PulseShape_histograms = new TClonesArray("TH1F",10);
 
   fNhistograms = 0;
-    
+
   fTree = new TTree("T", "Geant4 SBS Simulation");
 
   // Let's stop changing the ev_t data structure, because it screws up reading of the tree in the future. If we want to store any other event-specific information,
@@ -186,14 +188,14 @@ void G4SBSIO::InitializeTree(){
     fTree->Branch("AUT_Sivers_min", &fAUT_Sivers_min, "AUT_Sivers_min/D");
     fTree->Branch("AUT_Sivers_max", &fAUT_Sivers_max, "AUT_Sivers_max/D");
   }
-  
+
   //Instead of having the same tree structure as before, we want to dynamically generate tree branches depending on what kinds of detectors are present: Since we already require the ROOT libraries, we might as well use TStrings:
-    
+
   //For all tree branches representing data in sensitive detectors, we want to grab the information from fdetcon->SDlist
   //Later, we will add other kinds of sensitive detectors:
 
   bool keepanysdtracks = false;
-  
+
   for( set<G4String>::iterator d = (fdetcon->SDlist).begin(); d != (fdetcon->SDlist).end(); d++ ){
     //for( G4int idet=0; idet<fdetcon->fSDman->G
     G4String SDname = *d;
@@ -206,9 +208,9 @@ void G4SBSIO::InitializeTree(){
       //Create "GEM output" and "Tracker Output" data structures and associate them with this sensitive detector name:
       GEMdata[SDname] = G4SBSGEMoutput();
       trackdata[SDname] = G4SBSTrackerOutput();
-	
+
       BranchGEM(SDname);
-	
+
       break;
     case G4SBS::kCAL: //"CAL": Add appropriate branches:
       //Initialize "CAL output" data structure and associate with this sensitive detector:
@@ -227,40 +229,40 @@ void G4SBSIO::InitializeTree(){
       ecaldata[SDname] = G4SBSECaloutput();
       if( fUsingCerenkov || fUsingScintillation ) BranchECAL(SDname);
       break;
-    case G4SBS::kBD: 
-      // Beam Diffuser (BD) 
-      BDdata[SDname] = G4SBSBDoutput(); 
-      BranchBD(SDname); 
-      break; 
-    case G4SBS::kIC: 
-      // Ion chamber (IC) 
-      ICdata[SDname] = G4SBSICoutput(); 
-      BranchIC(SDname); 
-      break; 
-    case G4SBS::kTarget_GEn_Glass: 
-      // GEn target glass cell 
-      genTgtGCdata[SDname] = G4SBSTargetoutput(); 
-      BranchGEnTarget_Glass(SDname); 
-      break; 
-    case G4SBS::kTarget_GEn_Cu: 
-      // GEn target Cu  
-      genTgtCUdata[SDname] = G4SBSTargetoutput(); 
-      BranchGEnTarget_Cu(SDname); 
-      break; 
-    case G4SBS::kTarget_GEn_Al: 
-      // GEn target Al  
-      genTgtALdata[SDname] = G4SBSTargetoutput(); 
-      BranchGEnTarget_Al(SDname); 
+    case G4SBS::kBD:
+      // Beam Diffuser (BD)
+      BDdata[SDname] = G4SBSBDoutput();
+      BranchBD(SDname);
       break;
-    case G4SBS::kTarget_GEn_3He: 
-      // GEn target 3He  
-      genTgt3HEdata[SDname] = G4SBSTargetoutput(); 
-      BranchGEnTarget_3He(SDname); 
+    case G4SBS::kIC:
+      // Ion chamber (IC)
+      ICdata[SDname] = G4SBSICoutput();
+      BranchIC(SDname);
+      break;
+    case G4SBS::kTarget_GEn_Glass:
+      // GEn target glass cell
+      genTgtGCdata[SDname] = G4SBSTargetoutput();
+      BranchGEnTarget_Glass(SDname);
+      break;
+    case G4SBS::kTarget_GEn_Cu:
+      // GEn target Cu
+      genTgtCUdata[SDname] = G4SBSTargetoutput();
+      BranchGEnTarget_Cu(SDname);
+      break;
+    case G4SBS::kTarget_GEn_Al:
+      // GEn target Al
+      genTgtALdata[SDname] = G4SBSTargetoutput();
+      BranchGEnTarget_Al(SDname);
+      break;
+    case G4SBS::kTarget_GEn_3He:
+      // GEn target 3He
+      genTgt3HEdata[SDname] = G4SBSTargetoutput();
+      BranchGEnTarget_3He(SDname);
       break;
     }
 
     map<G4String,G4bool>::iterator keepsdflag = fKeepSDtracks.find( SDname );
-    
+
     if( fKeepAllSDtracks || (keepsdflag != fKeepSDtracks.end() && keepsdflag->second ) ){
       sdtrackdata[SDname] = G4SBSSDTrackOutput(SDname);
 
@@ -279,7 +281,7 @@ void G4SBSIO::InitializeTree(){
   if( keepanysdtracks ){
     BranchSDTracks();
   }
-  
+
   if( fUsePythia ){
     BranchPythia();
   }
@@ -287,14 +289,18 @@ void G4SBSIO::InitializeTree(){
   if( fUseSIMC ){
     BranchSIMC();
   }
-  
+
+  if( fUseSIMC_SIDIS ){
+    BranchSIMC_SIDIS();
+  }
+
   return;
 }
 
 void G4SBSIO::FillTree(){
-  if( !fTree ){ 
+  if( !fTree ){
     fprintf(stderr, "Error %s: %s line %d - Trying to fill non-existant tree\n", __PRETTY_FUNCTION__, __FILE__, __LINE__ );
-    return; 
+    return;
   }
 
   fTree->Fill();
@@ -315,7 +321,7 @@ void G4SBSIO::WriteTree(){
   Esum_histograms->Write();
   PulseShape_histograms->Compress();
   PulseShape_histograms->Write();
-    
+
   G4SBSRun::GetRun()->GetData()->Write("run_data", TObject::kOverwrite);
 
   // Produce and write out field map graphics
@@ -344,17 +350,17 @@ void G4SBSIO::WriteTree(){
       fGlobalField->WriteFieldMapSection( "database/BBfield_temp.table", G4SBS::kEarm, fdetcon->fEArmBuilder->fBBang,
 					  fdetcon->fEArmBuilder->fBBdist, -0.75*CLHEP::m, 2.25*CLHEP::m,
 					  3.0*CLHEP::m, 0.6*CLHEP::m, 24, 120, 120 );
-      
+
       G4cout << "done" << G4endl;
     }
-    
+
     //Now SBS: here we use a 1 x 3 x 3.5 m grid with 2.5-cm spacing:
     //As in the case of BB, we make the grid NOT user-configurable. We may revisit this later.
     //We should still allow the user to turn off the writing of these maps, though:
-    
+
     if( writeSBS ){
       G4cout << "Writing portable SBS field map..." << G4endl;
-      
+
       // fGlobalField->WriteFieldMapSection( "database/SBSfield_temp.table", G4SBS::kHarm, fdetcon->fHArmBuilder->f48D48ang,
       // 					  fdetcon->fHArmBuilder->f48D48dist-1.0*CLHEP::m, fdetcon->fHArmBuilder->f48D48dist + 2.5*CLHEP::m,
       // 					  3.0*CLHEP::m, 1.0*CLHEP::m, 40, 120, 140 );
@@ -362,11 +368,11 @@ void G4SBSIO::WriteTree(){
       fGlobalField->WriteFieldMapSection( "database/SBSfield_temp.table", G4SBS::kHarm, fdetcon->fHArmBuilder->f48D48ang,
 					  fdetcon->fHArmBuilder->f48D48dist, -1.0*CLHEP::m, 2.5*CLHEP::m,
 					  3.0*CLHEP::m, 1.0*CLHEP::m, 40, 120, 140 );
-      
+
       G4cout << "done" << G4endl;
     }
   }
-  
+
   for( vector<TH2F *>::iterator it = fGlobalField->fFieldPlots.begin(); it!= fGlobalField->fFieldPlots.end(); it++ ){
     (*it)->Write((*it)->GetName(), TObject::kOverwrite );
     delete (*it);
@@ -387,11 +393,11 @@ void G4SBSIO::WriteTree(){
 void G4SBSIO::BranchGEM(G4String SDname="GEM"){
   TString branch_prefix = SDname.data();
   TString branch_name;
-  
+
   branch_prefix.ReplaceAll("/",".");
- 
+
   //Branches with raw GEM data:
-  
+
   fTree->Branch( branch_name.Format( "%s.hit.nhits", branch_prefix.Data() ), &(GEMdata[SDname].nhits_GEM) );
   fTree->Branch( branch_name.Format( "%s.hit.plane", branch_prefix.Data() ), &(GEMdata[SDname].plane) );
   fTree->Branch( branch_name.Format( "%s.hit.strip", branch_prefix.Data() ), &(GEMdata[SDname].strip) );
@@ -431,14 +437,14 @@ void G4SBSIO::BranchGEM(G4String SDname="GEM"){
   fTree->Branch( branch_name.Format( "%s.hit.beta", branch_prefix.Data() ), &(GEMdata[SDname].beta) );
 
   map<G4String,G4bool>::iterator keepsdflag = fKeepSDtracks.find( SDname );
-    
+
   if( fKeepAllSDtracks || (keepsdflag != fKeepSDtracks.end() && keepsdflag->second ) ){
     //Add "SD track" indices:
     fTree->Branch( branch_name.Format( "%s.hit.otridx", branch_prefix.Data() ), &(GEMdata[SDname].otridx) );
     fTree->Branch( branch_name.Format( "%s.hit.ptridx", branch_prefix.Data() ), &(GEMdata[SDname].ptridx) );
     fTree->Branch( branch_name.Format( "%s.hit.sdtridx", branch_prefix.Data() ), &(GEMdata[SDname].sdtridx) );
   }
-  
+
   //Branches with "Tracker output" data:
   fTree->Branch( branch_name.Format("%s.Track.ntracks",branch_prefix.Data() ), &(trackdata[SDname].ntracks) );
   fTree->Branch( branch_name.Format("%s.Track.TID",branch_prefix.Data() ), &(trackdata[SDname].TrackTID) );
@@ -464,14 +470,14 @@ void G4SBSIO::BranchGEM(G4String SDname="GEM"){
   fTree->Branch( branch_name.Format("%s.Track.Ypfit",branch_prefix.Data() ), &(trackdata[SDname].TrackYpfit) );
 
   //map<G4String,G4bool>::iterator keepsdflag = fKeepSDtracks.find( SDname );
-    
+
   if( fKeepAllSDtracks || (keepsdflag != fKeepSDtracks.end() && keepsdflag->second ) ){
     //Add "SD track" indices:
     fTree->Branch( branch_name.Format( "%s.Track.otridx", branch_prefix.Data() ), &(trackdata[SDname].otridx) );
     fTree->Branch( branch_name.Format( "%s.Track.ptridx", branch_prefix.Data() ), &(trackdata[SDname].ptridx) );
     fTree->Branch( branch_name.Format( "%s.Track.sdtridx", branch_prefix.Data() ), &(trackdata[SDname].sdtridx) );
   }
-  
+
   map<G4String,G4bool>::iterator it = KeepHistoryflags.find( SDname );
 
   if( it != KeepHistoryflags.end() && it->second ){
@@ -496,7 +502,7 @@ void G4SBSIO::BranchGEM(G4String SDname="GEM"){
 void G4SBSIO::BranchCAL( G4String SDname="CAL" ){
   TString branch_prefix = SDname.data();
   TString branch_name;
-  
+
   branch_prefix.ReplaceAll("/",".");
 
   TString histname;
@@ -516,9 +522,9 @@ void G4SBSIO::BranchCAL( G4String SDname="CAL" ){
 						      gatewidthtemp );
 
   histogram_index[SDname] = fNhistograms;
-  
+
   fNhistograms++;
-			  
+
   //Define "hit" branches:
   fTree->Branch( branch_name.Format( "%s.det.esum", branch_prefix.Data() ), &(CALdata[SDname].Esum) );
   fTree->Branch( branch_name.Format( "%s.hit.nhits", branch_prefix.Data() ), &(CALdata[SDname].nhits_CAL) );
@@ -545,22 +551,22 @@ void G4SBSIO::BranchCAL( G4String SDname="CAL" ){
   fTree->Branch( branch_name.Format( "%s.hit.tmin", branch_prefix.Data() ), &(CALdata[SDname].tmin) );
   fTree->Branch( branch_name.Format( "%s.hit.tmax", branch_prefix.Data() ), &(CALdata[SDname].tmax) );
 
-  // Fill in ROOT tree branch to hold Pulse Shape info 
-  map<G4String,G4bool>::iterator keeppsflag = fKeepPulseShape.find( SDname );    
+  // Fill in ROOT tree branch to hold Pulse Shape info
+  map<G4String,G4bool>::iterator keeppsflag = fKeepPulseShape.find( SDname );
   if( fKeepAllPulseShape || (keeppsflag != fKeepPulseShape.end() && keeppsflag->second ) ){
     fTree->Branch( branch_name.Format( "%s.gatewidth", branch_prefix.Data() ), &(CALdata[SDname].gatewidth) );
     fTree->Branch( branch_name.Format( "%s.hit.edep_vs_time", branch_prefix.Data() ), &(CALdata[SDname].edep_vs_time) );
   }
 
   map<G4String,G4bool>::iterator keepsdflag = fKeepSDtracks.find( SDname );
-    
+
   if( fKeepAllSDtracks || (keepsdflag != fKeepSDtracks.end() && keepsdflag->second ) ){
     //Add "SD track" indices:
     fTree->Branch( branch_name.Format( "%s.hit.otridx", branch_prefix.Data() ), &(CALdata[SDname].otridx) );
     fTree->Branch( branch_name.Format( "%s.hit.ptridx", branch_prefix.Data() ), &(CALdata[SDname].ptridx) );
     fTree->Branch( branch_name.Format( "%s.hit.sdtridx", branch_prefix.Data() ), &(CALdata[SDname].sdtridx) );
   }
-  
+
   map<G4String,G4bool>::iterator it = KeepPartCALflags.find( SDname );
 
   if( it != KeepPartCALflags.end() && it->second ){
@@ -612,9 +618,9 @@ void G4SBSIO::BranchRICH(G4String SDname="RICH"){
   TString branch_prefix = SDname.data();
   TString branch_name;
   branch_prefix.ReplaceAll("/",".");
-  
-  //Branches for "hits": 
-  
+
+  //Branches for "hits":
+
   fTree->Branch( branch_name.Format("%s.hit.nhits", branch_prefix.Data() ), &(richdata[SDname].nhits_RICH) );
   fTree->Branch( branch_name.Format("%s.hit.PMT", branch_prefix.Data() ), &(richdata[SDname].PMTnumber) );
   fTree->Branch( branch_name.Format("%s.hit.row", branch_prefix.Data() ), &(richdata[SDname].row) );
@@ -646,7 +652,7 @@ void G4SBSIO::BranchRICH(G4String SDname="RICH"){
   fTree->Branch( branch_name.Format("%s.hit.volume_flag", branch_prefix.Data() ), &(richdata[SDname].volume_flag) );
 
   map<G4String,G4bool>::iterator keepsdflag = fKeepSDtracks.find( SDname );
-    
+
   if( fKeepAllSDtracks || (keepsdflag != fKeepSDtracks.end() && keepsdflag->second ) ){
     //Add "SD track" indices:
     fTree->Branch( branch_name.Format( "%s.hit.otridx", branch_prefix.Data() ), &(richdata[SDname].otridx) );
@@ -728,23 +734,23 @@ void G4SBSIO::BranchECAL(G4String SDname="ECAL"){
   fTree->Branch( branch_name.Format("%s.hit.Time_max", branch_prefix.Data() ), &(ecaldata[SDname].Time_max) );
 
   // *****
-  // Fill in ROOT tree branch to hold Pulse Shape info 
-  map<G4String,G4bool>::iterator keeppsflag = fKeepPulseShape.find( SDname );    
+  // Fill in ROOT tree branch to hold Pulse Shape info
+  map<G4String,G4bool>::iterator keeppsflag = fKeepPulseShape.find( SDname );
   if( fKeepAllPulseShape || (keeppsflag != fKeepPulseShape.end() && keeppsflag->second ) ){
     fTree->Branch( branch_name.Format( "%s.gatewidth", branch_prefix.Data() ), &(ecaldata[SDname].gatewidth) );
     fTree->Branch( branch_name.Format( "%s.hit.NPE_vs_time", branch_prefix.Data() ), &(ecaldata[SDname].NPE_vs_time) );
   }
   // *****
-  
+
   map<G4String,G4bool>::iterator keepsdflag = fKeepSDtracks.find( SDname );
-    
+
   if( fKeepAllSDtracks || (keepsdflag != fKeepSDtracks.end() && keepsdflag->second ) ){
     //Add "SD track" indices:
     fTree->Branch( branch_name.Format( "%s.hit.otridx", branch_prefix.Data() ), &(ecaldata[SDname].otridx) );
     fTree->Branch( branch_name.Format( "%s.hit.ptridx", branch_prefix.Data() ), &(ecaldata[SDname].ptridx) );
     fTree->Branch( branch_name.Format( "%s.hit.sdtridx", branch_prefix.Data() ), &(ecaldata[SDname].sdtridx) );
   }
-  
+
   map<G4String,G4bool>::iterator it = KeepPartCALflags.find( SDname );
 
   if( it != KeepPartCALflags.end() && it->second ){
@@ -804,6 +810,7 @@ void G4SBSIO::BranchPythia(){
 }
 
 void G4SBSIO::BranchSIMC(){
+
   fTree->Branch("simc.sigma",&(SIMCprimaries.sigma),"simc.sigma/D");
   fTree->Branch("simc.Weight",&(SIMCprimaries.Weight),"simc.Weight/D");
   fTree->Branch("simc.Q2",&(SIMCprimaries.Q2),"simc.Q2/D");
@@ -811,9 +818,9 @@ void G4SBSIO::BranchSIMC(){
   fTree->Branch("simc.nu",&(SIMCprimaries.nu),"simc.nu/D");
   fTree->Branch("simc.W",&(SIMCprimaries.W),"simc.W/D");
   fTree->Branch("simc.epsilon",&(SIMCprimaries.epsilon),"simc.epsilon/D");
-  
+
   fTree->Branch("simc.Ebeam",&(SIMCprimaries.Ebeam),"simc.Ebeam/D");
-  
+
   fTree->Branch("simc.fnucl",&(SIMCprimaries.fnucl),"simc.fnucl/I");
   fTree->Branch("simc.p_e",&(SIMCprimaries.p_e),"simc.p_e/D");
   fTree->Branch("simc.theta_e",&(SIMCprimaries.theta_e),"simc.theta_e/D");
@@ -827,13 +834,50 @@ void G4SBSIO::BranchSIMC(){
   fTree->Branch("simc.px_n",&(SIMCprimaries.px_n),"simc.px_n/D");
   fTree->Branch("simc.py_n",&(SIMCprimaries.py_n),"simc.py_n/D");
   fTree->Branch("simc.pz_n",&(SIMCprimaries.pz_n),"simc.pz_n/D");
-  
+
   fTree->Branch("simc.vx",&(SIMCprimaries.vx),"simc.vx/D");
   fTree->Branch("simc.vy",&(SIMCprimaries.vy),"simc.vy/D");
   fTree->Branch("simc.vz",&(SIMCprimaries.vz),"simc.vz/D");
 
   fTree->Branch("simc.veE",&(SIMCprimaries.veE),"simc.veE/D");
   fTree->Branch("simc.vetheta",&(SIMCprimaries.vetheta),"simc.vetheta/D");
+}
+
+void G4SBSIO::BranchSIMC_SIDIS(){
+
+  fTree->Branch("simc_sidis.sigma",&(SIMC_SIDISprimaries.sigma),"simc_sidis.sigma/D");
+  fTree->Branch("simc_sidis.Weight",&(SIMC_SIDISprimaries.Weight),"simc_sidis.Weight/D");
+  fTree->Branch("simc_sidis.Q2",&(SIMC_SIDISprimaries.Q2),"simc_sidis.Q2/D");
+  fTree->Branch("simc_sidis.xbj",&(SIMC_SIDISprimaries.xbj),"simc_sidis.xbj/D");
+  fTree->Branch("simc_sidis.nu",&(SIMC_SIDISprimaries.nu),"simc_sidis.nu/D");
+  fTree->Branch("simc_sidis.W",&(SIMC_SIDISprimaries.W),"simc_sidis.W/D");
+  fTree->Branch("simc_sidis.epsilon",&(SIMC_SIDISprimaries.epsilon),"simc_sidis.epsilon/D");
+
+  //this is not in current simc sidis tree, set manually in G4SBSEventGen.hh for now
+  fTree->Branch("simc_sidis.Ebeam",&(SIMC_SIDISprimaries.Ebeam),"simc_sidis.Ebeam/D");
+
+  fTree->Branch("simc_sidis.fnucl",&(SIMC_SIDISprimaries.fnucl),"simc_sidis.fnucl/I");
+  fTree->Branch("simc_sidis.p_e",&(SIMC_SIDISprimaries.p_e),"simc_sidis.p_e/D");
+  fTree->Branch("simc_sidis.theta_e",&(SIMC_SIDISprimaries.theta_e),"simc_sidis.theta_e/D");
+  fTree->Branch("simc_sidis.phi_e",&(SIMC_SIDISprimaries.phi_e),"simc_sidis.phi_e/D");
+  fTree->Branch("simc_sidis.px_e",&(SIMC_SIDISprimaries.px_e),"simc_sidis.px_e/D");
+  fTree->Branch("simc_sidis.py_e",&(SIMC_SIDISprimaries.py_e),"simc_sidis.py_e/D");
+  fTree->Branch("simc_sidis.pz_e",&(SIMC_SIDISprimaries.pz_e),"simc_sidis.pz_e/D");
+  fTree->Branch("simc_sidis.p_n",&(SIMC_SIDISprimaries.p_n),"simc_sidis.p_n/D");
+  fTree->Branch("simc_sidis.theta_n",&(SIMC_SIDISprimaries.theta_n),"simc_sidis.theta_n/D");
+  fTree->Branch("simc_sidis.phi_n",&(SIMC_SIDISprimaries.phi_n),"simc_sidis.phi_n/D");
+  fTree->Branch("simc_sidis.px_n",&(SIMC_SIDISprimaries.px_n),"simc_sidis.px_n/D");
+  fTree->Branch("simc_sidis.py_n",&(SIMC_SIDISprimaries.py_n),"simc_sidis.py_n/D");
+  fTree->Branch("simc_sidis.pz_n",&(SIMC_SIDISprimaries.pz_n),"simc_sidis.pz_n/D");
+
+  //these are not in current simc sidis tree, set manually in G4SBSEventGen.hh for now
+  //update simc sidis tree later
+  fTree->Branch("simc_sidis.vx",&(SIMC_SIDISprimaries.vx),"simc_sidis.vx/D");
+  fTree->Branch("simc_sidis.vy",&(SIMC_SIDISprimaries.vy),"simc_sidis.vy/D");
+  fTree->Branch("simc_sidis.vz",&(SIMC_SIDISprimaries.vz),"simc_sidis.vz/D");
+
+  //fTree->Branch("simc_sidis.veE",&(SIMC_SIDISprimaries.veE),"simc_sidis.veE/D");
+  //fTree->Branch("simc_sidis.vetheta",&(SIMC_SIDISprimaries.vetheta),"simc_sidis.vetheta/D");
 }
 
 void G4SBSIO::UpdateGenDataFromDetCon(){ //Go with whatever is in fdetcon as of run start for constant parameters of the run describing detector layout:
@@ -857,9 +901,9 @@ void G4SBSIO::BranchSDTracks(){
   //TString branch_prefix = "AllSD";
   //TString branch_name;
   //branch_prefix.ReplaceAll("/",".");
-  
+
   //  map<G4String,G4bool>::iterator k = KeepSDtracks.find( SDname );
-  
+
   //if( sdtrackdata.find( SDname ) != sdtrackdata.end() && (fKeepSDtracks.find(SDname)->second || fKeepAllSDtracks) ){
   //"Original track" info:
   fTree->Branch(  "OTrack.ntracks", &(allsdtrackdata.notracks) );
@@ -924,7 +968,7 @@ void G4SBSIO::BranchSDTracks(){
 }
 
 void G4SBSIO::BranchBD(G4String SDname){
-   // create the branches for the Beam Diffuser (BD) 
+   // create the branches for the Beam Diffuser (BD)
    TString branch_name;
    TString branch_prefix = SDname.data();
    branch_prefix.ReplaceAll("/",".");
@@ -947,7 +991,7 @@ void G4SBSIO::BranchBD(G4String SDname){
 }
 
 void G4SBSIO::BranchIC(G4String SDname){
-   // create the branches for the Ion Chamber (IC)  
+   // create the branches for the Ion Chamber (IC)
    TString branch_name;
    TString branch_prefix = SDname.data();
    branch_prefix.ReplaceAll("/",".");
@@ -987,7 +1031,7 @@ void G4SBSIO::BranchIC(G4String SDname){
 }
 
 void G4SBSIO::BranchGEnTarget_Glass(G4String SDname){
-   // create the branches for the GEn target glass cell 
+   // create the branches for the GEn target glass cell
    TString branch_name;
    TString branch_prefix = SDname.data();
    branch_prefix.ReplaceAll("/",".");
@@ -1025,7 +1069,7 @@ void G4SBSIO::BranchGEnTarget_Glass(G4String SDname){
 }
 
 void G4SBSIO::BranchGEnTarget_Al(G4String SDname){
-   // create the branches for the GEn target glass cell, endcap (Al or Cu) 
+   // create the branches for the GEn target glass cell, endcap (Al or Cu)
    TString branch_name;
    TString branch_prefix = SDname.data();
    branch_prefix.ReplaceAll("/",".");
@@ -1063,7 +1107,7 @@ void G4SBSIO::BranchGEnTarget_Al(G4String SDname){
 }
 
 void G4SBSIO::BranchGEnTarget_Cu(G4String SDname){
-   // create the branches for the GEn target glass cell, endcap (Al or Cu) 
+   // create the branches for the GEn target glass cell, endcap (Al or Cu)
    TString branch_name;
    TString branch_prefix = SDname.data();
    branch_prefix.ReplaceAll("/",".");
@@ -1101,7 +1145,7 @@ void G4SBSIO::BranchGEnTarget_Cu(G4String SDname){
 }
 
 void G4SBSIO::BranchGEnTarget_3He(G4String SDname){
-   // create the branches for the GEn target glass cell, endcap (Al or Cu) 
+   // create the branches for the GEn target glass cell, endcap (Al or Cu)
    TString branch_name;
    TString branch_prefix = SDname.data();
    branch_prefix.ReplaceAll("/",".");

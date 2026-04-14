@@ -11,6 +11,7 @@
 #include "DSS2007FF.hh"
 #include "G4SBSPythiaOutput.hh"
 #include "G4SBSSIMCOutput.hh"
+#include "G4SBSSIMC_SIDISOutput.hh"
 #include "G4SBSUtil.hh"
 #include "TFile.h"
 #include "TTree.h"
@@ -147,15 +148,21 @@ public:
 
   void LoadPythiaChain(G4String fname);
 
+
   void SetSIMCEvent( G4SBSSIMCOutput ev ){ fSIMCEvent = ev; }
   G4SBSSIMCOutput GetSIMCEvent(){ return fSIMCEvent; }
 
   simc_tree *GetSIMCTree(){ return fSIMCTree; }
+
+
+  void SetSIMC_SIDISEvent( G4SBSSIMC_SIDISOutput ev ){ fSIMC_SIDISEvent = ev; }
+  G4SBSSIMC_SIDISOutput GetSIMC_SIDISEvent(){ return fSIMC_SIDISEvent; }
+
   simc_tree_SIDIS *GetSIMCSIDISTree(){ return fSIMC_SIDISTree; }
+
+
   TChain *GetSIMCChain(){ return fSIMCChain; }
-
   void LoadSIMCChain(G4String fname);
-
 
   void Initialize();
 
@@ -437,6 +444,7 @@ private:
   simc_tree_SIDIS *fSIMC_SIDISTree;
 
   G4SBSSIMCOutput fSIMCEvent;
+  G4SBSSIMC_SIDISOutput fSIMC_SIDISEvent;
 
   G4double TriangleFunc(G4double a, G4double b, G4double c );
 };
