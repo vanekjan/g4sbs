@@ -148,7 +148,8 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   if( sbsgen->GetKine() == G4SBS::kSIMC_SIDIS ){ //SIMC event:
-    G4SBSSIMCOutput Primaries = sbsgen->GetSIMCEvent();
+
+    G4SBSSIMC_SIDISOutput Primaries = sbsgen->GetSIMC_SIDISEvent();
 
     //Primaries.ConvertToTreeUnits();
 
@@ -183,7 +184,7 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleGun->GeneratePrimaryVertex(anEvent);
 
     //Primaries.ConvertToTreeUnits();
-    fIO->SetSIMCOutput( Primaries );
+    fIO->SetSIMC_SIDISOutput( Primaries );
 
     return;
   }
