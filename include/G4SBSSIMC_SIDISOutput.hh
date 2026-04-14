@@ -10,7 +10,7 @@ public:
   ~G4SBSSIMC_SIDISOutput();
   void Clear();
   void ConvertToTreeUnitsSIDIS();
-  void ConvertToGeantUnitsSDIS();
+  void ConvertToGeantUnitsSIDIS();
 
   int PDG_ID; // PDG ID of SIDIS hadron
 
