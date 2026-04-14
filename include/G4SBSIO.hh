@@ -305,7 +305,7 @@ private:
   G4SBSSIMCOutput SIMCprimaries;
 
   G4bool fUseSIMC_SIDIS;
-  G4SBSSIMCOutput SIMC_SIDISprimaries;
+  G4SBSSIMC_SIDISOutput SIMC_SIDISprimaries;
 
   G4SBSGlobalField *fGlobalField;
 
