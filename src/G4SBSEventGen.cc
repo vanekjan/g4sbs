@@ -2642,8 +2642,8 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
   fSIMC_SIDISEvent.W = fSIMC_SIDISTree->W;
   fSIMC_SIDISEvent.epsilon = fSIMC_SIDISTree->epsilon;
 
-  //fSIMC_SIDISEvent.Ebeam = fSIMC_SIDISTree->ebeam/MeV;
-  fSIMC_SIDISEvent.Ebeam = 11.;                                            //hard coded for now, may add to simc tree
+  fSIMC_SIDISEvent.Ebeam = fSIMC_SIDISTree->ebeam;
+  //fSIMC_SIDISEvent.Ebeam = 11.;                                            //hard coded for now, may add to simc tree
   //scattered e- kinematics at vertex
   //fSIMC_SIDISEvent.veE = fSIMC_SIDISTree->veE/1E3; //GeV
   //fSIMC_SIDISEvent.veE = -99; //GeV                                       //not used for SIDIS, may remove later with dedicated tree
@@ -2663,16 +2663,16 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
   fSIMC_SIDISEvent.px_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->ux_p;
   fSIMC_SIDISEvent.py_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->uy_p;
   fSIMC_SIDISEvent.pz_n = fSIMC_SIDISTree->p_p*fSIMC_SIDISTree->uz_p;
-/*
+
   fSIMC_SIDISEvent.vx = fSIMC_SIDISTree->vxi*cm;
   fSIMC_SIDISEvent.vy = fSIMC_SIDISTree->vyi*cm;
   fSIMC_SIDISEvent.vz = fSIMC_SIDISTree->vzi*cm;
-*/
+/*
   //not in simc SIDIS tree now, may add later
   fSIMC_SIDISEvent.vx = 0;
   fSIMC_SIDISEvent.vy = 0;
   fSIMC_SIDISEvent.vz = 0;
-
+*/
   fSIMC_SIDISEvent.ConvertToGeantUnits();
 
   fVert.set(fSIMC_SIDISEvent.vx, fSIMC_SIDISEvent.vy, fSIMC_SIDISEvent.vz);
