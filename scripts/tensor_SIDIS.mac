@@ -1,6 +1,6 @@
 /g4sbs/filename ./output/tensor_SIDIS_g4sbs.root
 
-/g4sbs/simcfile ./input/tensor_SIDIS_simc.root
+/g4sbs/simcfile ./input/tensor_SIDIS_simc_new.root
 
 ## Configure Experiment
 /g4sbs/exp             simc_sidis
