@@ -273,7 +273,7 @@ G4SBSMessenger::G4SBSMessenger(){
   FirstEventCmd->SetParameterName("firstevent",false);
 
   expCmd = new G4UIcmdWithAString("/g4sbs/exp",this);
-  expCmd->SetGuidance("Experiment type from gep, gmn, gen, a1n, sidis, C16, tdis, ndvcs, genrp");
+  expCmd->SetGuidance("Experiment type from gep, gmn, gen, a1n, sidis, simc_sidis, C16, tdis, ndvcs, genrp");
   expCmd->SetParameterName("exptype", false);
 
   GunParticleCmd = new G4UIcmdWithAString("/g4sbs/particle",this);
@@ -1373,6 +1373,10 @@ void G4SBSMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue){
     //AJP: Add SIDIS as a valid experiment type:
     if( newValue.compareTo("sidis") == 0 ){
       fExpType = G4SBS::kSIDISExp;
+      validcmd = true;
+    }
+    if( newValue.compareTo("simc_sidis") == 0 ){
+      fExpType = G4SBS::kSIDIS_SIMCExp;
       validcmd = true;
     }
     if( newValue.compareTo("C16") == 0 ){
