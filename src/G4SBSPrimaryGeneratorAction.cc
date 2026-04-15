@@ -181,7 +181,8 @@ void G4SBSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->GeneratePrimaryVertex(anEvent);
 
-    Primaries.ConvertToTreeUnitsSIDIS();
+    Primaries.ConvertToTreeUnits();
+
     fIO->SetSIMC_SIDISOutput( Primaries );
 
     return;

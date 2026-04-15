@@ -2673,7 +2673,7 @@ bool G4SBSEventGen::GenerateSIMC_SIDIS(){
   fSIMC_SIDISEvent.vy = 0;
   fSIMC_SIDISEvent.vz = 0;
 
-  fSIMC_SIDISEvent.ConvertToGeantUnitsSIDIS();
+  fSIMC_SIDISEvent.ConvertToGeantUnits();
 
   fVert.set(fSIMC_SIDISEvent.vx, fSIMC_SIDISEvent.vy, fSIMC_SIDISEvent.vz);
 

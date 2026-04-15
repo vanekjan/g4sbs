@@ -41,7 +41,7 @@ void G4SBSSIMC_SIDISOutput::Clear(){
   vz = 0.0;
 }
 
-void G4SBSSIMC_SIDISOutput::ConvertToTreeUnitsSIDIS(){ //This is called once per event after primary vertices are generated. When this is called, all quantities should be in GEANT4 standard units of MeV, ns, cm;
+void G4SBSSIMC_SIDISOutput::ConvertToTreeUnits(){ //This is called once per event after primary vertices are generated. When this is called, all quantities should be in GEANT4 standard units of MeV, ns, cm;
 
   //sigma /= (1.0/(cm*cm));
   //Q2 /= (GeV*GeV);
@@ -64,7 +64,7 @@ void G4SBSSIMC_SIDISOutput::ConvertToTreeUnitsSIDIS(){ //This is called once per
   vz /= m;
 }
 
-void G4SBSSIMC_SIDISOutput::ConvertToGeantUnitsSIDIS(){ //Convert SIMC units to Geant units
+void G4SBSSIMC_SIDISOutput::ConvertToGeantUnits(){ //Convert SIMC units to Geant units
   //sigma /= (1.0/(cm*cm));
   //Q2 /= (GeV*GeV);
   //W /= (GeV);
