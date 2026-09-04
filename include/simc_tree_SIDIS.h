@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Apr  7 14:00:02 2026 by ROOT version 6.22/06
+// Wed Apr 15 18:21:12 2026 by ROOT version 6.36.04
 // from TTree h10/h10
-// found on file: tensor_eD_SIDIS_new_xyptar.root
+// found on file: tensor_SIDIS_simc_new.root
 //////////////////////////////////////////////////////////
 
 #ifndef simc_tree_SIDIS_h
@@ -90,6 +90,10 @@ public :
    Float_t         ph_e;
    Float_t         th_p;
    Float_t         ph_p;
+   Float_t         vxi;
+   Float_t         vyi;
+   Float_t         vzi;
+   Float_t         ebeam;
 
    // List of branches
    TBranch        *b_hsdelta;   //!
@@ -160,6 +164,10 @@ public :
    TBranch        *b_ph_e;   //!
    TBranch        *b_th_p;   //!
    TBranch        *b_ph_p;   //!
+   TBranch        *b_vxi;   //!
+   TBranch        *b_vyi;   //!
+   TBranch        *b_vzi;   //!
+   TBranch        *b_ebeam;   //!
 
    simc_tree_SIDIS(TTree *tree=0);
    virtual ~simc_tree_SIDIS();
@@ -168,7 +176,7 @@ public :
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
    virtual void     Loop();
-   virtual Bool_t   Notify();
+   virtual bool     Notify();
    virtual void     Show(Long64_t entry = -1);
 };
 
@@ -180,9 +188,9 @@ simc_tree_SIDIS::simc_tree_SIDIS(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("tensor_eD_SIDIS_new_xyptar.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("tensor_SIDIS_simc_new.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("tensor_eD_SIDIS_new_xyptar.root");
+         f = new TFile("tensor_SIDIS_simc_new.root");
       }
       f->GetObject("h10",tree);
 
@@ -299,10 +307,14 @@ void simc_tree_SIDIS::Init(TTree *tree)
    fChain->SetBranchAddress("ph_e", &ph_e, &b_ph_e);
    fChain->SetBranchAddress("th_p", &th_p, &b_th_p);
    fChain->SetBranchAddress("ph_p", &ph_p, &b_ph_p);
+   fChain->SetBranchAddress("vxi", &vxi, &b_vxi);
+   fChain->SetBranchAddress("vyi", &vyi, &b_vyi);
+   fChain->SetBranchAddress("vzi", &vzi, &b_vzi);
+   fChain->SetBranchAddress("ebeam", &ebeam, &b_ebeam);
    Notify();
 }
 
-Bool_t simc_tree_SIDIS::Notify()
+bool simc_tree_SIDIS::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -310,7 +322,7 @@ Bool_t simc_tree_SIDIS::Notify()
    // to the generated code, but the routine can be extended by the
    // user if needed. The return value is currently not used.
 
-   return kTRUE;
+   return true;
 }
 
 void simc_tree_SIDIS::Show(Long64_t entry)

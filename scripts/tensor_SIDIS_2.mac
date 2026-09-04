@@ -1,9 +1,9 @@
-/g4sbs/filename ./output/tensor_SIDIS_g4sbs.root
+/g4sbs/filename ./output/tensor_SIDIS_g4sbs_2.root
 
-/g4sbs/simcfile ./input/tensor_SIDIS_simc.root
+/g4sbs/simcfile ./input/tensor_SIDIS_simc_new.root
 
 ## Configure Experiment
-/g4sbs/exp             gmn
+/g4sbs/exp             simc_sidis
 
 ## Configure the target
 /g4sbs/target          LD2
@@ -11,41 +11,44 @@
 
 ## Configure generator settings
 /g4sbs/kine            simc_sidis           ## Generator
-/g4sbs/beamcur         30 muA
-/g4sbs/rasterx         2.0 mm
-/g4sbs/rastery         2.0 mm
-/g4sbs/beamE           4.03 GeV
-/g4sbs/thmin           44.0 deg
-/g4sbs/thmax           56.0 deg
-/g4sbs/phmin          -20 deg
-/g4sbs/phmax           20 deg
+/g4sbs/hadron          pi+         
 
 ## Configure standard detector settings
-/g4sbs/hcaldist       10.0 m
-/g4sbs/hcalvoffset     0.45 m
+/g4sbs/hcaldist        11.0 m
+/g4sbs/hcalvoffset     0.75 m
 /g4sbs/beamlineconfig  3                 ## set relevant beamline configuration
 /g4sbs/sbsclampopt     3                 ## Front field clamp only
-/g4sbs/uselead         0                 ## Lead turned off
 
 ## Configure the magnets
-#/g4sbs/tosfield        BigBitePortableFieldMap.table 1
-#/g4sbs/tosfield        SBSPortableFieldMap_FrontClampOnly_NoPoleShims.table 2
-/g4sbs/bbfield         1
-#/g4sbs/scalebbfield    1.077586
-/g4sbs/scalebbfield    0.9672
-/g4sbs/48d48field      1
-/g4sbs/sbsmagfield     0.9188 tesla
-/g4sbs/bbang          49.0 deg
-/g4sbs/bbdist          1.55 m
-/g4sbs/sbsang         22.5 deg
-/g4sbs/48D48dist       2.25 m
+/g4sbs/bbfield         0 
+/g4sbs/tosfield        SBSPortableFieldMap_FrontClampOnly_NoPoleShims.table 2
+#/g4sbs/scalesbsfield   0.390
+#/g4sbs/scalesbsfield   0.8
+/g4sbs/bbang           11.35 deg
+/g4sbs/bbdist          1.7988 m
+/g4sbs/sbsang          15.0 deg
+/g4sbs/48D48dist       1.6 m 
+/g4sbs/sbsmagfield  1.4 tesla
 
-/g4sbs/setbigbiteplate 1
-/g4sbs/bigbiteplatethick 0.3175 cm
-/g4sbs/bigbiteplatematerial Aluminum
+/g4sbs/uselead 0
+/g4sbs/richdist    4.6 m
+/g4sbs/richhoffset 0.025 m
+/g4sbs/sbstrkrdist 5.925 m
+/g4sbs/sbstrkrpitch 0.0 deg
+/g4sbs/userichaero true
+/g4sbs/richgas     C4F10
+/g4sbs/grinchgas   C4F10
 
-## misc
-/g4sbs/keepsdtrackinfo all true
-/g4sbs/totalabs        true
 
-/g4sbs/run 1000
+
+## Al bg shielding in front of the scattering chamber
+/g4sbs/setbigbiteplate      0           ## ON for SBS11,14,8,9
+/g4sbs/bigbiteplatethick    0.3175 cm   ## 1/8 in
+/g4sbs/bigbiteplatematerial Al
+
+/g4sbs/keepsdtrackinfo 	all true
+/g4sbs/totalabs true
+
+## Run 10000 events
+/g4sbs/eventstatusevery 1000
+/g4sbs/run             10000

@@ -28,7 +28,7 @@
 /g4sbs/bbdist          1.7988 m
 /g4sbs/sbsang          15.0 deg
 /g4sbs/48D48dist       1.6 m 
-#/g4sbs/sbsmagfield  1.4 tesla
+/g4sbs/sbsmagfield  1.4 tesla
 
 ## Al bg shielding in front of the scattering chamber
 /g4sbs/setbigbiteplate      0           ## ON for SBS11,14,8,9
